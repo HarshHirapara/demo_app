@@ -8,8 +8,8 @@ String userModelToJson(List<UserModel> data) =>
 
 class UserModel {
   int id;
-  String firstname;
-  String lastname;
+  String firstName;
+  String lastName;
   String email;
   DateTime birthDate;
   Login login;
@@ -20,8 +20,8 @@ class UserModel {
 
   UserModel({
     required this.id,
-    required this.firstname,
-    required this.lastname,
+    required this.firstName,
+    required this.lastName,
     required this.email,
     required this.birthDate,
     required this.login,
@@ -33,8 +33,8 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        firstname: json["firstname"],
-        lastname: json["lastname"],
+        firstName: json["firstname"],
+        lastName: json["lastname"],
         email: json["email"],
         birthDate: DateTime.parse(json["birthDate"]),
         login: Login.fromJson(json["login"]),
@@ -46,8 +46,8 @@ class UserModel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "firstname": firstname,
-        "lastname": lastname,
+        "firstname": firstName,
+        "lastname": lastName,
         "email": email,
         "birthDate":
             "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
@@ -63,14 +63,14 @@ class Address {
   String street;
   String suite;
   City city;
-  Zipcode zipcode;
+  Zipcode zipCode;
   Geo geo;
 
   Address({
     required this.street,
     required this.suite,
     required this.city,
-    required this.zipcode,
+    required this.zipCode,
     required this.geo,
   });
 
@@ -78,7 +78,7 @@ class Address {
         street: json["street"],
         suite: json["suite"],
         city: cityValues.map[json["city"]]!,
-        zipcode: zipcodeValues.map[json["zipcode"]]!,
+        zipCode: zipcodeValues.map[json["zipcode"]]!,
         geo: Geo.fromJson(json["geo"]),
       );
 
@@ -86,7 +86,7 @@ class Address {
         "street": street,
         "suite": suite,
         "city": cityValues.reverse[city],
-        "zipcode": zipcodeValues.reverse[zipcode],
+        "zipcode": zipcodeValues.reverse[zipCode],
         "geo": geo.toJson(),
       };
 }
