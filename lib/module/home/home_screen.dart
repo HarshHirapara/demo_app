@@ -1,6 +1,10 @@
+import 'dart:developer';
 import 'package:demo_app/core/constant/color_common_file.dart';
 import 'package:demo_app/core/constant/icon_common_file.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/model_class/user_model_class.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +14,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<UserModel> userList = [];
+
+  Future getUserApi() async {
+    Response response = await Dio().get('https://jsonplaceholder.org/users');
+    List apiData = response.data;
+    log(response.data.toString());
+    if (response.statusCode == 200) {
+      for (Map<String, dynamic> index in apiData) {
+        userList.add(
+          UserModel.fromJson(index),
+        );
+      }
+    }
+    log(userList.length.toString());
+  }
+
+  @override
+  void initState() {
+    getUserApi();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
