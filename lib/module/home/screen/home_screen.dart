@@ -1,10 +1,11 @@
-import 'dart:developer';
-import 'package:demo_app/core/constant/color_common_file.dart';
-import 'package:demo_app/core/constant/icon_common_file.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:demo_app/core/api/get_users_detils.dart';
+import 'package:demo_app/core/constant/common_colors_file.dart';
+import 'package:demo_app/core/constant/common_icons_file.dart';
+import 'package:demo_app/core/database/getx_functions.dart';
+import 'package:demo_app/module/widget/common_widget_user_card.dart';
 
-import '../../core/model_class/user_model_class.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,59 +15,62 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<UserModel> userList = [];
-
-  Future getUserApi() async {
-    Response response = await Dio().get('https://jsonplaceholder.org/users');
-    List apiData = response.data;
-    log(response.data.toString());
-    if (response.statusCode == 200) {
-      for (Map<String, dynamic> index in apiData) {
-        userList.add(
-          UserModel.fromJson(index),
-        );
-      }
-    }
-    log(userList.length.toString());
-  }
-
   @override
   void initState() {
-    getUserApi();
+    ApiCalls.getUserApi();
     super.initState();
   }
 
+  Icon searchIcon = const Icon(Icons.search);
+  Widget appBarTitle = const Text('Home Page');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 10,
+        title: appBarTitle,
         actions: [
-          SizedBox(
-            height: 200,
-            width: 380,
-            child: TextFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
+          IconButton(
+            onPressed: () {
+              setState(
+                () {
+                  if (searchIcon.icon == const Icon(Icons.search).icon) {
+                    searchIcon = const Icon(Icons.cancel);
+                    appBarTitle = Container(
+                      decoration: BoxDecoration(
+                        color: CommonColors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Search',
+                          filled: true,
+                        ),
+                        onChanged: (value) {},
+                      ),
+                    );
+                  } else {
+                    searchIcon = const Icon(Icons.search);
+                    appBarTitle = const Text('Home Page');
+                  }
+                },
+              );
+            },
+            icon: searchIcon,
           ),
         ],
       ),
       drawer: Drawer(
         backgroundColor: Colors.black45,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             DrawerHeader(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   const CircleAvatar(
-                    radius: 50.00,
-                    // child: Image.network(
-                    //     'https://images.unsplash.com/photo-1701273973387-8abff988bb88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8'),
+                    radius: 52,
+                    backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1701273973387-8abff988bb88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8'),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
@@ -120,7 +124,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: const Center(child: null),
+      body: Obx(
+        () => ListView.builder(
+          itemCount: GetXFunctions.userList.length,
+          itemBuilder: (context, index) =>
+              UserCard(index: index, userList: GetXFunctions.userList),
+        ),
+      ),
     );
   }
 }
