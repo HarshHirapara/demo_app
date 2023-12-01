@@ -39,7 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          SizedBox(
+            height: 200,
+            width: 380,
+            child: TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       drawer: Drawer(
         backgroundColor: Colors.black45,
         child: Column(
@@ -106,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: const Center(),
+      body: const Center(child: null),
     );
   }
 }
