@@ -14,7 +14,7 @@ class FavoriteUserScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: GetXFunctions.favoriteList.length,
         itemBuilder: (context, index) =>
-            UserCard(index: index, userList: GetXFunctions.favoriteList),
+            UserCard(index: index, user: GetXFunctions.favoriteList),
       ),
     );
   }
