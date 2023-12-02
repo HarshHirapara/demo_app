@@ -2,6 +2,7 @@ import 'package:demo_app/core/api/get_users_detils.dart';
 import 'package:demo_app/core/constant/common_colors_file.dart';
 import 'package:demo_app/core/constant/common_icons_file.dart';
 import 'package:demo_app/core/database/getx_functions.dart';
+import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
 import 'package:demo_app/module/widget/common_widget_user_card.dart';
 
 import 'package:flutter/material.dart';
@@ -83,10 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-              ),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(
                 thickness: 0.7,
                 color: CommonColors.white,
@@ -111,7 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FavoriteUserScreen(),
+                ));
+              },
               leading: SizedBox(
                 child: CommonIcons.favorite,
               ),

@@ -1,13 +1,22 @@
-import 'package:demo_app/core/constant/common_icons_file.dart';
+import 'dart:developer';
+
+import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:flutter/material.dart';
 import '../../core/constant/common_colors_file.dart';
 import '../../core/model/user_model_class.dart';
 
-class UserCard extends StatelessWidget {
+class UserCard extends StatefulWidget {
+  const UserCard({super.key, required this.index, required this.userList});
   final int index;
   final List<UserModel> userList;
-  const UserCard({super.key, required this.index, required this.userList});
 
+  @override
+  State<UserCard> createState() => _UserCardState();
+}
+
+Icon favoriteBorder = const Icon(Icons.favorite_border);
+
+class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -22,14 +31,17 @@ class UserCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(CommonIcons.favorite.icon),
+                      IconButton(
+                        onPressed: () {},
+                        icon: favoriteBorder,
+                      ),
                     ],
                   ),
                   const CircleAvatar(
                     radius: 55,
                   ),
                   Text(
-                    '${userList[index].id} | ${userList[index].firstName} ${userList[index].lastName}',
+                    '${widget.userList[widget.index].id} | ${widget.userList[widget.index].firstName} ${widget.userList[widget.index].lastName}',
                     style: TextStyle(
                       color: CommonColors.black,
                       fontSize: 15,
@@ -37,7 +49,7 @@ class UserCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    ' ${userList[index].email}',
+                    ' ${widget.userList[widget.index].email}',
                     style: TextStyle(
                       color: CommonColors.black,
                       fontSize: 12,
@@ -62,7 +74,7 @@ class UserCard extends StatelessWidget {
                         ),
                         TextSpan(
                           text:
-                              '${userList[index].address.street} ${userList[index].address.suite} ${userList[index].address.city} ${userList[index].address.zipCode}',
+                              '${widget.userList[widget.index].address.street} ${widget.userList[widget.index].address.suite} ${widget.userList[widget.index].address.city} ${widget.userList[widget.index].address.zipCode}',
                           style: TextStyle(
                             color: CommonColors.black,
                           ),
@@ -82,7 +94,7 @@ class UserCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: userList[index].website,
+                          text: widget.userList[widget.index].website,
                           style: TextStyle(
                             color: CommonColors.black,
                           ),
@@ -102,7 +114,7 @@ class UserCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: userList[index].website,
+                          text: widget.userList[widget.index].website,
                           style: TextStyle(
                             color: CommonColors.black,
                           ),
@@ -115,7 +127,7 @@ class UserCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.phone),
                       // Icon(Icons.location_on),
-                      Text('${userList[index].phone}'),
+                      Text('${widget.userList[widget.index].phone}'),
                     ],
                   ),
                 ],
