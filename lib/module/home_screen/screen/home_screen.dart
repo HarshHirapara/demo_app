@@ -5,7 +5,6 @@ import 'package:demo_app/core/constant/common_colors_file.dart';
 import 'package:demo_app/core/constant/common_icons_file.dart';
 import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:demo_app/core/database/sqflite_database.dart';
-import 'package:demo_app/core/model/user_model_class.dart';
 import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
 import 'package:demo_app/module/widget/common_widget_user_card.dart';
 
@@ -32,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    GetXFunctions.foundUser = GetXFunctions.userList;
     refreshData();
     super.initState();
   }
@@ -97,80 +97,127 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Divider(
-                thickness: 0.7,
-                color: CommonColors.white,
-              ),
-            ),
-            ListTile(
-              onTap: () => Navigator.pop(context),
-              leading: Icon(
-                Icons.home,
-                color: CommonColors.white,
-              ),
-              title: Text(
-                'Home',
-                style: TextStyle(fontSize: 25, color: CommonColors.white),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 70, right: 10),
-              child: Divider(
-                thickness: 0.3,
-                color: CommonColors.white,
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const FavoriteUserScreen(),
-                ));
-              },
-              leading: SizedBox(
-                child: CommonIcons.favorite,
-              ),
-              iconColor: CommonColors.red,
-              title: Text(
-                'Favorite',
-                style: TextStyle(fontSize: 23, color: CommonColors.yellow),
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text('Clear Data'),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Divider(
+                    thickness: 0.7,
+                    color: CommonColors.white,
+                  ),
+                ),
+                ListTile(
+                  onTap: () => Navigator.pop(context),
+                  leading: Icon(
+                    Icons.home,
+                    color: CommonColors.white,
+                  ),
+                  title: Text(
+                    'Home',
+                    style: TextStyle(fontSize: 25, color: CommonColors.white),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 70, right: 10),
+                  child: Divider(
+                    thickness: 0.3,
+                    color: CommonColors.white,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const FavoriteUserScreen(),
+                    ));
+                  },
+                  leading: SizedBox(
+                    child: CommonIcons.favorite,
+                  ),
+                  iconColor: CommonColors.red,
+                  title: Text(
+                    'Favorite',
+                    style: TextStyle(fontSize: 23, color: CommonColors.yellow),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    GetXFunctions.userList.clear();
+                    GetXFunctions.favoriteList.clear();
+                  },
+                  child: Text(
+                    'Clear Data',
+                    style: TextStyle(color: CommonColors.red),
+                  ),
+                )
+              ],
             ),
           ],
         ),
       ),
       body: Obx(
-        () => ListView.builder(
-            itemCount: GetXFunctions.userList.length,
-            itemBuilder: (context, index) {
-              // final user = userList[index];
-              // log(userList[index].toString());
-              return UserCard(
-                  index: index, user: GetXFunctions.userList[index]);
-            }),
+        () {
+          if (GetXFunctions.userList.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+              itemCount: GetXFunctions.userList.length,
+              itemBuilder: (context, index) {
+                // final user = userList[index];
+                // log(userList[index].toString());
+                return UserCard(index: index, user: GetXFunctions.userList);
+              },
+            );
+          }
+        },
       ),
     );
   }
 }
 
-  // List<Map<String, dynamic>> myData = [];
-  // bool isLoading = true;
+// List<Map<String, dynamic>> myData = [];
+// bool isLoading = true;
 
-  // void refreshData() async {
-  //   final data = await DatabaseHandler.getItems();
-  //   setState(() {
-  //     myData = data;
-  //     isLoading = false;
-  //   });
-  // }
+// void refreshData() async {
+//   final data = await DatabaseHandler.getItems();
+//   setState(() {
+//     myData = data;
+//     isLoading = false;
+//   });
+// }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   refreshData();
-  // }
+// @override
+// void initState() {
+//   super.initState();
+//   refreshData();
+// }
+
+// List allUsers = [
+//   'phone',
+//   'app',
+//   'mango',
+//   'harsh',
+//   'school',
+//   'hello',
+//   'hey',
+//   'Cricket'
+// ];
+// List foundUser = [];
+
+// @override
+// void initState() {
+//   foundUser = allUsers;
+//   super.initState();
+// }
+
+// void filter(value) {
+//   List results = [];
+//   if (value.isEmpty) {
+//     results = allUsers;
+//   } else {
+//     results = allUsers.where((element) => element.contains(value)).toList();
+//   }
+
+//   setState(() {
+//     foundUser = results;
+//   });
+// }

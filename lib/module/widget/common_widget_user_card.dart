@@ -5,21 +5,19 @@ import '../../core/constant/common_colors_file.dart';
 class UserCard extends StatefulWidget {
   const UserCard({super.key, required this.index, required this.user});
   final int index;
-  // final List<UserModel> user;
-  final dynamic user;
+  final List<Map<String, dynamic>> user;
 
   @override
   State<UserCard> createState() => _UserCardState();
 }
 
 Icon favoriteBorder = const Icon(Icons.favorite_border);
-bool isFavorite = true;
 
 class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
-    final firstName = widget.user['firstName'];
-    final lastName = widget.user['lastName'];
+    final firstName = widget.user[widget.index]['firstName'];
+    final lastName = widget.user[widget.index]['lastName'];
     return Card(
       elevation: 5,
       color:
@@ -35,8 +33,20 @@ class _UserCardState extends State<UserCard> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {},
-                        icon: isFavorite
+                        onPressed: () {
+                          if (GetXFunctions.favoriteList
+                              .contains(GetXFunctions.userList[widget.index])) {
+                            GetXFunctions.favoriteList[widget.index].remove;
+
+                            setState(() {});
+                          } else {
+                            GetXFunctions.favoriteList
+                                .add(GetXFunctions.userList[widget.index]);
+                            setState(() {});
+                          }
+                        },
+                        icon: GetXFunctions.favoriteList
+                                .contains(GetXFunctions.userList[widget.index])
                             ? const Icon(Icons.favorite)
                             : const Icon(Icons.favorite_border),
                       ),
@@ -50,7 +60,7 @@ class _UserCardState extends State<UserCard> {
                     ),
                   ),
                   Text(
-                    '${widget.user['id']} | ${widget.user['firstName']} ${widget.user['lastName']}',
+                    '${widget.user[widget.index]['id']} | ${widget.user[widget.index]['firstName']} ${widget.user[widget.index]['lastName']}',
                     style: TextStyle(
                       color: CommonColors.black,
                       fontSize: 15,
@@ -58,10 +68,10 @@ class _UserCardState extends State<UserCard> {
                     ),
                   ),
                   Text(
-                    ' ${widget.user['email']}',
+                    '${widget.user[widget.index]['email']}',
                     style: TextStyle(
                       color: CommonColors.black,
-                      fontSize: 12,
+                      fontSize: 15,
                     ),
                   ),
                 ],
@@ -136,7 +146,7 @@ class _UserCardState extends State<UserCard> {
                     children: [
                       const Icon(Icons.phone),
                       // Icon(Icons.location_on),
-                      Text('${widget.user['phone']}'),
+                      Text('${widget.user[widget.index]['phone']}'),
                     ],
                   ),
                 ],
