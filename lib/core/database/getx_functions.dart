@@ -3,4 +3,5 @@ import 'package:get/get_rx/get_rx.dart';
 
 class GetXFunctions {
   static RxList<UserModel> userList = <UserModel>[].obs;
+  static RxList<UserModel> favoriteList = <UserModel>[].obs;
 }
