@@ -37,6 +37,8 @@ dependencies:
   flutter_screenutil: ^5.9.0
   get: ^4.6.6
   dio: ^5.4.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:

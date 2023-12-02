@@ -1,26 +1,29 @@
-import 'dart:developer';
-
 import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:flutter/material.dart';
 import '../../core/constant/common_colors_file.dart';
-import '../../core/model/user_model_class.dart';
 
 class UserCard extends StatefulWidget {
-  const UserCard({super.key, required this.index, required this.userList});
+  const UserCard({super.key, required this.index, required this.user});
   final int index;
-  final List<UserModel> userList;
+  // final List<UserModel> user;
+  final dynamic user;
 
   @override
   State<UserCard> createState() => _UserCardState();
 }
 
 Icon favoriteBorder = const Icon(Icons.favorite_border);
+bool isFavorite = true;
 
 class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
+    final firstName = widget.user['firstName'];
+    final lastName = widget.user['lastName'];
     return Card(
       elevation: 5,
+      color:
+          widget.index.isEven ? CommonColors.white : Colors.deepPurple.shade100,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -33,15 +36,21 @@ class _UserCardState extends State<UserCard> {
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: favoriteBorder,
+                        icon: isFavorite
+                            ? const Icon(Icons.favorite)
+                            : const Icon(Icons.favorite_border),
                       ),
                     ],
                   ),
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 55,
+                    child: Text(
+                      '${firstName[0]}${lastName[0]}',
+                      style: const TextStyle(fontSize: 35),
+                    ),
                   ),
                   Text(
-                    '${widget.userList[widget.index].id} | ${widget.userList[widget.index].firstName} ${widget.userList[widget.index].lastName}',
+                    '${widget.user['id']} | ${widget.user['firstName']} ${widget.user['lastName']}',
                     style: TextStyle(
                       color: CommonColors.black,
                       fontSize: 15,
@@ -49,7 +58,7 @@ class _UserCardState extends State<UserCard> {
                     ),
                   ),
                   Text(
-                    ' ${widget.userList[widget.index].email}',
+                    ' ${widget.user['email']}',
                     style: TextStyle(
                       color: CommonColors.black,
                       fontSize: 12,
@@ -72,13 +81,13 @@ class _UserCardState extends State<UserCard> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        TextSpan(
-                          text:
-                              '${widget.userList[widget.index].address.street} ${widget.userList[widget.index].address.suite} ${widget.userList[widget.index].address.city} ${widget.userList[widget.index].address.zipCode}',
-                          style: TextStyle(
-                            color: CommonColors.black,
-                          ),
-                        ),
+                        // TextSpan(
+                        //   text:
+                        //       '${widget.user[widget.index].address.street} ${widget.user[widget.index].address.suite} ${widget.user[widget.index].address.city} ${widget.user[widget.index].address.zipCode}',
+                        //   style: TextStyle(
+                        //     color: CommonColors.black,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -93,12 +102,12 @@ class _UserCardState extends State<UserCard> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        TextSpan(
-                          text: widget.userList[widget.index].website,
-                          style: TextStyle(
-                            color: CommonColors.black,
-                          ),
-                        ),
+                        // TextSpan(
+                        //   text: widget.user[widget.index].website,
+                        //   style: TextStyle(
+                        //     color: CommonColors.black,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -113,12 +122,12 @@ class _UserCardState extends State<UserCard> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        TextSpan(
-                          text: widget.userList[widget.index].website,
-                          style: TextStyle(
-                            color: CommonColors.black,
-                          ),
-                        ),
+                        // TextSpan(
+                        //   text: widget.user[widget.index].website,
+                        //   style: TextStyle(
+                        //     color: CommonColors.black,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -127,7 +136,7 @@ class _UserCardState extends State<UserCard> {
                     children: [
                       const Icon(Icons.phone),
                       // Icon(Icons.location_on),
-                      Text('${widget.userList[widget.index].phone}'),
+                      Text('${widget.user['phone']}'),
                     ],
                   ),
                 ],

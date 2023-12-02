@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:demo_app/core/api/get_users_detils.dart';
 import 'package:demo_app/core/constant/common_colors_file.dart';
 import 'package:demo_app/core/constant/common_icons_file.dart';
 import 'package:demo_app/core/database/getx_functions.dart';
+import 'package:demo_app/core/database/sqflite_database.dart';
+import 'package:demo_app/core/model/user_model_class.dart';
 import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
 import 'package:demo_app/module/widget/common_widget_user_card.dart';
 
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/state_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,9 +20,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<dynamic> usersData = [];
+  refreshData() async {
+    ApiCalls.getUserApi();
+    usersData = await SqfLiteDatabase.getData();
+    for (var element in usersData) {
+      GetXFunctions.userList.add(element);
+    }
+    log(usersData.toString());
+  }
+
   @override
   void initState() {
-    ApiCalls.getUserApi();
+    refreshData();
     super.initState();
   }
 
@@ -123,16 +137,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 23, color: CommonColors.yellow),
               ),
             ),
+            TextButton(
+              onPressed: () {},
+              child: const Text('Clear Data'),
+            ),
           ],
         ),
       ),
       body: Obx(
         () => ListView.builder(
-          itemCount: GetXFunctions.userList.length,
-          itemBuilder: (context, index) =>
-              UserCard(index: index, userList: GetXFunctions.userList),
-        ),
+            itemCount: GetXFunctions.userList.length,
+            itemBuilder: (context, index) {
+              // final user = userList[index];
+              // log(userList[index].toString());
+              return UserCard(
+                  index: index, user: GetXFunctions.userList[index]);
+            }),
       ),
     );
   }
 }
+
+  // List<Map<String, dynamic>> myData = [];
+  // bool isLoading = true;
+
+  // void refreshData() async {
+  //   final data = await DatabaseHandler.getItems();
+  //   setState(() {
+  //     myData = data;
+  //     isLoading = false;
+  //   });
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   refreshData();
+  // }
