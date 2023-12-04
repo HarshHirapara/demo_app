@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var element in usersData) {
       GetXFunctions.userList.add(element);
     }
-    log(usersData.toString());
+      log(usersData.toString());
   }
 
   @override
@@ -139,14 +139,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 23, color: CommonColors.yellow),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    GetXFunctions.userList.clear();
-                    GetXFunctions.favoriteList.clear();
-                  },
-                  child: Text(
-                    'Clear Data',
-                    style: TextStyle(color: CommonColors.red),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height - 430),
+                  child: TextButton(
+                    onPressed: () {
+                      GetXFunctions.userList.clear();
+                      GetXFunctions.favoriteList.clear();
+                    },
+                    child: Text(
+                      'Clear Data',
+                      style: TextStyle(color: CommonColors.red),
+                    ),
                   ),
                 )
               ],
@@ -157,7 +161,21 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Obx(
         () {
           if (GetXFunctions.userList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'No DataFound',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else {
             return ListView.builder(
               itemCount: GetXFunctions.userList.length,

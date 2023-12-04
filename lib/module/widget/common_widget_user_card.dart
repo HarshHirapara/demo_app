@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import '../../core/constant/common_colors_file.dart';
 
 class UserCard extends StatefulWidget {
@@ -35,20 +38,24 @@ class _UserCardState extends State<UserCard> {
                       IconButton(
                         onPressed: () {
                           if (GetXFunctions.favoriteList
-                              .contains(GetXFunctions.userList[widget.index])) {
-                            GetXFunctions.favoriteList[widget.index].remove;
-
-                            setState(() {});
+                              .contains(widget.user[widget.index])) {
+                            GetXFunctions.favoriteList.removeWhere((element) =>
+                                element == widget.user[widget.index]);
+                            // setState(() {});
                           } else {
                             GetXFunctions.favoriteList
-                                .add(GetXFunctions.userList[widget.index]);
-                            setState(() {});
+                                .add(widget.user[widget.index]);
+                            log(GetXFunctions.favoriteList.length.toString());
+
+                            // setState(() {});
                           }
                         },
-                        icon: GetXFunctions.favoriteList
-                                .contains(GetXFunctions.userList[widget.index])
-                            ? const Icon(Icons.favorite)
-                            : const Icon(Icons.favorite_border),
+                        icon: Obx(
+                          () => GetXFunctions.favoriteList
+                                  .contains(widget.user[widget.index])
+                              ? const Icon(Icons.favorite)
+                              : const Icon(Icons.favorite_border),
+                        ),
                       ),
                     ],
                   ),
@@ -71,7 +78,7 @@ class _UserCardState extends State<UserCard> {
                     '${widget.user[widget.index]['email']}',
                     style: TextStyle(
                       color: CommonColors.black,
-                      fontSize: 15,
+                      fontSize: 12,
                     ),
                   ),
                 ],
