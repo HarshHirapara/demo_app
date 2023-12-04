@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:demo_app/core/database/sqflite_database.dart';
 import 'package:dio/dio.dart';
 

@@ -19,8 +19,8 @@ Icon favoriteBorder = const Icon(Icons.favorite_border);
 class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
-    final firstName = widget.user[widget.index]['firstName'];
-    final lastName = widget.user[widget.index]['lastName'];
+    final String firstName = widget.user[widget.index]['firstName'];
+    final String lastName = widget.user[widget.index]['lastName'];
     return Card(
       elevation: 5,
       color:

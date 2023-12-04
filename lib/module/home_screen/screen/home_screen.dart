@@ -19,19 +19,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<dynamic> usersData = [];
+  List<Map<String, dynamic>> usersData = [];
+  List<Map<String, dynamic>> foundData = [];
   refreshData() async {
     ApiCalls.getUserApi();
     usersData = await SqfLiteDatabase.getData();
-    for (var element in usersData) {
-      GetXFunctions.userList.add(element);
-    }
-      log(usersData.toString());
+    GetXFunctions.userList.addAll(usersData);
+    log(usersData.toString());
   }
 
   @override
   void initState() {
-    GetXFunctions.foundUser = GetXFunctions.userList;
     refreshData();
     super.initState();
   }

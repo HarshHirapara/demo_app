@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'package:demo_app/core/model/user_model_class.dart';
-import 'package:get/state_manager.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SqfLiteDatabase {

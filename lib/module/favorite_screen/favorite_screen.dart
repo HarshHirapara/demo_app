@@ -13,11 +13,21 @@ class FavoriteUserScreen extends StatelessWidget {
         title: const Text('Favorite Users'),
       ),
       body: Obx(
-        () => ListView.builder(
-          itemCount: GetXFunctions.favoriteList.length,
-          itemBuilder: (context, index) =>
-              UserCard(index: index, user: GetXFunctions.favoriteList),
-        ),
+        () {
+          if (GetXFunctions.favoriteList.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Favorite User Found',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          }
+          return ListView.builder(
+            itemCount: GetXFunctions.favoriteList.length,
+            itemBuilder: (context, index) =>
+                UserCard(index: index, user: GetXFunctions.favoriteList),
+          );
+        },
       ),
     );
   }
