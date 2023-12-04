@@ -62,10 +62,10 @@ class SqfLiteDatabase {
     String lastName,
     String email,
     String birthDate,
-    // dynamic address,
-    // String phone,
+    String address,
+    String phone,
     String website,
-    // dynamic company,
+    String company,
   ) async {
     final db = await SqfLiteDatabase().db();
     final data = {
@@ -74,10 +74,10 @@ class SqfLiteDatabase {
       'lastName': lastName,
       'email': email,
       'birthDate': birthDate,
-      // 'address': address,
-      // 'phone': phone,
+      'address': address,
+      'phone': phone,
       'website': website,
-      // 'company': company,
+      'company': company,
     };
     final user = await db.insert(
       'users',
