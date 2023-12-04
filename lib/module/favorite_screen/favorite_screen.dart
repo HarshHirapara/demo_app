@@ -1,5 +1,5 @@
 import 'package:demo_app/core/database/getx_functions.dart';
-import 'package:demo_app/module/widget/common_widget_user_card.dart';
+import 'package:demo_app/module/widget/common_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 

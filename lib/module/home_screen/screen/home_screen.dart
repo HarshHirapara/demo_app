@@ -6,10 +6,10 @@ import 'package:demo_app/core/constant/common_icons_file.dart';
 import 'package:demo_app/core/database/getx_functions.dart';
 import 'package:demo_app/core/database/sqflite_database.dart';
 import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
-import 'package:demo_app/module/widget/common_widget_user_card.dart';
+import 'package:demo_app/module/widget/common_user_card.dart';
 
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,9 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> foundData = [];
   refreshData() async {
     ApiCalls.getUserApi();
+    //  GetXFunctions.userList = await SqfLiteDatabase.getData();
     usersData = await SqfLiteDatabase.getData();
     GetXFunctions.userList.addAll(usersData);
-    log(usersData.toString());
+    // log(usersData.toString());
   }
 
   @override
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 ListTile(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Get.back(),
                   leading: Icon(
                     Icons.home,
                     color: CommonColors.white,
@@ -124,14 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const FavoriteUserScreen(),
-                    ));
+                    Get.to(() => const FavoriteUserScreen());
                   },
                   leading: SizedBox(
                     child: CommonIcons.favorite,
                   ),
-                  iconColor: CommonColors.red,
+                  iconColor: CommonColors.deepPurple,
                   title: Text(
                     'Favorite',
                     style: TextStyle(fontSize: 23, color: CommonColors.yellow),
@@ -144,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       GetXFunctions.userList.clear();
                       GetXFunctions.favoriteList.clear();
+                      Get.back();
                     },
                     child: Text(
                       'Clear Data',
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       'No DataFound',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 17),
                     ),
                   ),
                 ],
@@ -237,3 +237,26 @@ class _HomeScreenState extends State<HomeScreen> {
 //     foundUser = results;
 //   });
 // }
+
+  //  var mappedList = boards.boards!.take(5).toList(); 
+
+
+  //  // now, from the list above, I map each result into a key-value pair
+
+  //   var mappedValues = mappedList.map((m) => { 'headsign': m.getString('headsign'), 'time': m.getString('time') });
+
+  //  // this list will look like:
+  //  // [{ headsign: 'value1', title: 'title1'}, { headsign: 'value2', title: 'value2' }]
+
+
+  //  // Now moving mappedValues list to showDialog
+  //  String title = ("Title Test");
+
+  //  _DropDownList(mappedValues, title);
+  //  });
+  // }
+
+
+  // Future<void> _DropDownList(List<Map<String, dynamic>> values, String title) async {
+  //        var test1 = ListBody(
+  //             ...
