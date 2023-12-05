@@ -1,11 +1,15 @@
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:demo_app/core/database/sqflite_database.dart';
 import 'package:dio/dio.dart';
 
+import '../../module/widget/data_connectivity_dialog_bot.dart';
+import '../getx/getx_functions.dart';
 import '../model/user_model_class.dart';
 
 class ApiCalls {
+  List<Map<String, dynamic>> usersDataFormDatabase = [];
   static List<UserModel> usersData = [];
   static Future getUserApi() async {
     Response response = await Dio().get('https://jsonplaceholder.org/users');
@@ -13,9 +17,6 @@ class ApiCalls {
     log(response.data.toString());
     if (response.statusCode == 200) {
       for (Map<String, dynamic> index in apiData) {
-        // GetXFunctions.userList.add(
-        //   UserModel.fromJson(index),
-        // );
         usersData.add(UserModel.fromJson(index));
       }
       for (UserModel index in usersData) {
@@ -45,6 +46,18 @@ class ApiCalls {
           company,
         );
       }
+    }
+  }
+
+  refreshData(context) async {
+    log('Refresh Data');
+    var networkIsOn = await Connectivity().checkConnectivity();
+    if (networkIsOn != ConnectivityResult.none) {
+      ApiCalls.getUserApi();
+      usersDataFormDatabase = await SqfLiteDatabase.getData();
+      GetXFunctions.userList.addAll(usersDataFormDatabase);
+    } else {
+      DataConnectivityCheck.showDialogBox(context);
     }
   }
 }
