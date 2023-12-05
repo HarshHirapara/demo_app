@@ -141,5 +141,3 @@ class UserCard extends StatelessWidget {
     );
   }
 }
-
-Icon favoriteBorder = const Icon(Icons.favorite_border);

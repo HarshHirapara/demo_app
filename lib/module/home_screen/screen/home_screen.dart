@@ -1,15 +1,17 @@
-import 'dart:developer';
+import 'dart:math';
 
-import 'package:demo_app/core/api/get_users_detils.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:demo_app/core/constant/common_colors_file.dart';
 import 'package:demo_app/core/constant/common_icons_file.dart';
-import 'package:demo_app/core/database/getx_functions.dart';
-import 'package:demo_app/core/database/sqflite_database.dart';
+import 'package:demo_app/core/getx/getx_functions.dart';
 import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
 import 'package:demo_app/module/widget/common_user_card.dart';
+import 'package:demo_app/module/widget/data_connectivity_dialog_bot.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../core/api/get_users_detils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,21 +21,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> usersData = [];
-  List<Map<String, dynamic>> foundData = [];
-  refreshData() async {
-    ApiCalls.getUserApi();
-    //  GetXFunctions.userList = await SqfLiteDatabase.getData();
-    usersData = await SqfLiteDatabase.getData();
-    GetXFunctions.userList.addAll(usersData);
-    // log(usersData.toString());
-  }
+  RxList<Map<String, dynamic>> result = <Map<String, dynamic>>[].obs;
+  RxList<Map<String, dynamic>> foundUser = <Map<String, dynamic>>[].obs;
+  // static RxString? search;
 
   @override
   void initState() {
-    refreshData();
     super.initState();
+    internetChecking(context);
+    ApiCalls().refreshData(context);
+    foundUser = GetXFunctions.userList;
   }
+
+  void searchUser(value) {
+    if (value.isEmpty) {
+      result = GetXFunctions.userList;
+    } else {
+      for (var i = 0; i < GetXFunctions.userList.length; i++) {
+        if (value == (GetXFunctions.userList[i]['firstName']).toString()) {
+          result.add(GetXFunctions.userList[i]);
+        }
+      }
+      foundUser = result;
+    }
+  }
+
+  // @override
+// void initState() {
+//   foundUser = allUsers;
+//   super.initState();
+// }
+
+// void filter(value) {
+//   List results = [];
+//   if (value.isEmpty) {
+//     results = allUsers;
+//   } else {
+//     results = allUsers.where((element) => element.contains(value)).toList();
+//   }
+
+//   setState(() {
+//     foundUser = results;
+//   });
+// }
+
+  internetChecking(context) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      DataConnectivityCheck.showDialogBox(context);
+    }
+  }
+
+  // refreshData(context) async {
+  //   var networkIsOn = await Connectivity().checkConnectivity();
+  //   if (networkIsOn != ConnectivityResult.none) {
+  //     ApiCalls.getUserApi();
+  //     usersData = await SqfLiteDatabase.getData();
+  //     GetXFunctions.userList.addAll(usersData);
+  //   } else {
+  //     DataConnectivityCheck.showDialogBox(context);
+  //   }
+  // }
 
   Icon searchIcon = const Icon(Icons.search);
   Widget appBarTitle = const Text('Home Page');
@@ -60,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           hintText: 'Search',
                           filled: true,
                         ),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          searchUser(value);
+                        },
                       ),
                     );
                   } else {
@@ -82,10 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   const CircleAvatar(
-                    radius: 52,
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1701273973387-8abff988bb88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8'),
-                  ),
+                      radius: 52,
+                      backgroundImage:
+                          AssetImage('assets/images/profilePhoto.jpeg')),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
@@ -175,13 +224,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            return ListView.builder(
-              itemCount: GetXFunctions.userList.length,
-              itemBuilder: (context, index) {
-                // final user = userList[index];
-                // log(userList[index].toString());
-                return UserCard(index: index, user: GetXFunctions.userList);
+            return RefreshIndicator(
+              onRefresh: () async {
+                return;
               },
+              child: ListView.builder(
+                itemCount: foundUser.length,
+                itemBuilder: (context, index) {
+                  // final user = userList[index];
+                  // log(userList[index].toString());
+                  return UserCard(index: index, user: foundUser);
+                },
+              ),
             );
           }
         },
@@ -189,6 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// <uses-permission android:name="android.permission.INTERNET" />
 
 // List<Map<String, dynamic>> myData = [];
 // bool isLoading = true;
@@ -238,25 +294,22 @@ class _HomeScreenState extends State<HomeScreen> {
 //   });
 // }
 
-  //  var mappedList = boards.boards!.take(5).toList(); 
+//  var mappedList = boards.boards!.take(5).toList();
 
+//  // now, from the list above, I map each result into a key-value pair
 
-  //  // now, from the list above, I map each result into a key-value pair
+//   var mappedValues = mappedList.map((m) => { 'headsign': m.getString('headsign'), 'time': m.getString('time') });
 
-  //   var mappedValues = mappedList.map((m) => { 'headsign': m.getString('headsign'), 'time': m.getString('time') });
+//  // this list will look like:
+//  // [{ headsign: 'value1', title: 'title1'}, { headsign: 'value2', title: 'value2' }]
 
-  //  // this list will look like:
-  //  // [{ headsign: 'value1', title: 'title1'}, { headsign: 'value2', title: 'value2' }]
+//  // Now moving mappedValues list to showDialog
+//  String title = ("Title Test");
 
+//  _DropDownList(mappedValues, title);
+//  });
+// }
 
-  //  // Now moving mappedValues list to showDialog
-  //  String title = ("Title Test");
-
-  //  _DropDownList(mappedValues, title);
-  //  });
-  // }
-
-
-  // Future<void> _DropDownList(List<Map<String, dynamic>> values, String title) async {
-  //        var test1 = ListBody(
-  //             ...
+// Future<void> _DropDownList(List<Map<String, dynamic>> values, String title) async {
+//        var test1 = ListBody(
+//             ...

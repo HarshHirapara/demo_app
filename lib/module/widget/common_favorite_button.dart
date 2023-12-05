@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/database/getx_functions.dart';
+import '../../core/getx/getx_functions.dart';
 
 class CommonFavoriteButton extends StatelessWidget {
   const CommonFavoriteButton(

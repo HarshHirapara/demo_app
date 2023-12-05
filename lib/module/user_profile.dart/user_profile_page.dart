@@ -27,42 +27,45 @@ class UserProfile extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        CommonUserProfileAvatar(
-                            firstName: firstName, lastName: lastName),
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Column(
                         children: [
-                          Text(
-                            '${user[index]['firstName']} ${user[index]['lastName']}',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${user[index]['email']}',
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
+                          CommonUserProfileAvatar(
+                              firstName: firstName, lastName: lastName),
                         ],
                       ),
-                    )
-                  ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${user[index]['firstName']} ${user[index]['lastName']}',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${user[index]['email']}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Column(
                   children: [
@@ -99,7 +102,7 @@ class UserProfile extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(
-                        Icons.abc,
+                        Icons.perm_identity,
                         color: CommonColors.deepPurple,
                       ),
                       title: Text(
