@@ -40,7 +40,11 @@ class UserCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          CommonFavoriteButton(index: index, user: user)
+                          CommonFavoriteButton(
+                            index: index,
+                            user: user,
+                            isUserCard: true,
+                          )
                         ],
                       ),
                       CommonUserProfileAvatar(

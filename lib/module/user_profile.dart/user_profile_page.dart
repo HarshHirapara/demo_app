@@ -22,7 +22,11 @@ class UserProfile extends StatelessWidget {
           '${user[index]['firstName']} ${user[index]['lastName']}',
         ),
         actions: [
-          CommonFavoriteButton(index: index, user: user),
+          CommonFavoriteButton(
+            index: index,
+            user: user,
+            isUserCard: false,
+          ),
         ],
       ),
       body: Padding(

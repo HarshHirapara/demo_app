@@ -6,7 +6,11 @@ import '../../core/getx/getx_handler.dart';
 
 class CommonFavoriteButton extends StatelessWidget {
   const CommonFavoriteButton(
-      {super.key, required this.index, required this.user});
+      {super.key,
+      required this.index,
+      required this.user,
+      required this.isUserCard});
+  final bool isUserCard;
   final int index;
   final List<Map<String, dynamic>> user;
   @override
@@ -17,7 +21,9 @@ class CommonFavoriteButton extends StatelessWidget {
           if (GetXDataHandler.favoriteList.contains(user[index])) {
             GetXDataHandler.favoriteList
                 .removeWhere((element) => element == user[index]);
-            Get.back();
+            if (!isUserCard) {
+              Get.back();
+            }
           } else {
             GetXDataHandler.favoriteList.add(user[index]);
           }
