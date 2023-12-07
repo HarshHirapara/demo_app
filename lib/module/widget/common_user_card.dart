@@ -4,15 +4,21 @@ import 'package:demo_app/module/user_profile.dart/user_profile_page.dart';
 import 'package:demo_app/module/widget/common_favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import '../../core/constant/common_colors.dart';
+import '../../core/getx/getx_handler.dart';
 import 'common_divider.dart';
 import 'common_user_profile_avatar.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key, required this.index, required this.user});
+  const UserCard({
+    super.key,
+    required this.index,
+    required this.user,
+    required this.isFavoriteScreen,
+  });
   final int index;
   final List<Map<String, dynamic>> user;
+  final bool isFavoriteScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +46,29 @@ class UserCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          CommonFavoriteButton(
-                            index: index,
-                            user: user,
-                            isUserCard: true,
-                          )
+                          isFavoriteScreen
+                              ? Obx(
+                                  () => IconButton(
+                                    onPressed: () async {
+                                      if (GetXDataHandler.favoriteList
+                                          .contains(user[index])) {
+                                        GetXDataHandler.favoriteList
+                                            .removeWhere((element) =>
+                                                element == user[index]);
+                                      } else {
+                                        GetXDataHandler.favoriteList
+                                            .add(user[index]);
+                                      }
+                                    },
+                                    icon: user.isEmpty
+                                        ? CommonIcons.favoriteBorder
+                                        : GetXDataHandler.favoriteList
+                                                .contains(user[index])
+                                            ? CommonIcons.favorite
+                                            : CommonIcons.favoriteBorder,
+                                  ),
+                                )
+                              : CommonFavoriteButton(index: index, user: user)
                         ],
                       ),
                       CommonUserProfileAvatar(

@@ -3,7 +3,6 @@ import 'package:demo_app/module/widget/common_divider.dart';
 import 'package:demo_app/module/widget/common_favorite_button.dart';
 import 'package:demo_app/module/widget/common_user_profile_avatar.dart';
 import 'package:flutter/material.dart';
-
 import '../widget/common_list_tile.dart';
 
 class UserProfile extends StatelessWidget {
@@ -22,11 +21,7 @@ class UserProfile extends StatelessWidget {
           '${user[index]['firstName']} ${user[index]['lastName']}',
         ),
         actions: [
-          CommonFavoriteButton(
-            index: index,
-            user: user,
-            isUserCard: false,
-          ),
+          CommonFavoriteButton(index: index, user: user),
         ],
       ),
       body: Padding(
