@@ -1,17 +1,18 @@
-import 'dart:math';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:demo_app/core/constant/common_colors_file.dart';
-import 'package:demo_app/core/constant/common_icons_file.dart';
-import 'package:demo_app/core/getx/getx_functions.dart';
-import 'package:demo_app/module/favorite_screen/favorite_screen.dart';
-import 'package:demo_app/module/widget/common_user_card.dart';
-import 'package:demo_app/module/widget/data_connectivity_dialog_bot.dart';
-
+import 'package:demo_app/core/constant/common_images.dart';
+import 'package:demo_app/core/constant/common_string.dart';
+import 'package:demo_app/core/database/sqflite_database.dart';
+import 'package:demo_app/module/widget/common_divider.dart';
+import 'package:demo_app/module/widget/common_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../core/api/get_users_detils.dart';
+import '../../../core/constant/common_colors.dart';
+import '../../../core/constant/common_icons.dart';
+import '../../../core/getx/getx_handler.dart';
+import '../../favorite_screen/favorite_screen.dart';
+import '../../widget/common_user_card.dart';
+import '../../widget/common_data_connectivity_dialog_bot.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,49 +22,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  RxList<Map<String, dynamic>> result = <Map<String, dynamic>>[].obs;
-  RxList<Map<String, dynamic>> foundUser = <Map<String, dynamic>>[].obs;
-  // static RxString? search;
-
   @override
   void initState() {
     super.initState();
     internetChecking(context);
     ApiCalls().refreshData(context);
-    foundUser = GetXFunctions.userList;
+    GetXDataHandler.foundUser = GetXDataHandler.userList;
   }
-
-  void searchUser(value) {
-    if (value.isEmpty) {
-      result = GetXFunctions.userList;
-    } else {
-      for (var i = 0; i < GetXFunctions.userList.length; i++) {
-        if (value == (GetXFunctions.userList[i]['firstName']).toString()) {
-          result.add(GetXFunctions.userList[i]);
-        }
-      }
-      foundUser = result;
-    }
-  }
-
-  // @override
-// void initState() {
-//   foundUser = allUsers;
-//   super.initState();
-// }
-
-// void filter(value) {
-//   List results = [];
-//   if (value.isEmpty) {
-//     results = allUsers;
-//   } else {
-//     results = allUsers.where((element) => element.contains(value)).toList();
-//   }
-
-//   setState(() {
-//     foundUser = results;
-//   });
-// }
 
   internetChecking(context) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -72,73 +37,63 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // refreshData(context) async {
-  //   var networkIsOn = await Connectivity().checkConnectivity();
-  //   if (networkIsOn != ConnectivityResult.none) {
-  //     ApiCalls.getUserApi();
-  //     usersData = await SqfLiteDatabase.getData();
-  //     GetXFunctions.userList.addAll(usersData);
-  //   } else {
-  //     DataConnectivityCheck.showDialogBox(context);
-  //   }
-  // }
-
-  Icon searchIcon = const Icon(Icons.search);
-  Widget appBarTitle = const Text('Home Page');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 10,
-        title: appBarTitle,
+        title: Obx(
+          () => GetXDataHandler.isSearching.value
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: CommonColors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: CommonString.search,
+                      filled: true,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        GetXDataHandler.searchUser(value);
+                      });
+                    },
+                  ),
+                )
+              : Text(CommonString.homePageAppBarrTitle),
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(
-                () {
-                  if (searchIcon.icon == const Icon(Icons.search).icon) {
-                    searchIcon = const Icon(Icons.cancel);
-                    appBarTitle = Container(
-                      decoration: BoxDecoration(
-                        color: CommonColors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'Search',
-                          filled: true,
-                        ),
-                        onChanged: (value) {
-                          searchUser(value);
-                        },
-                      ),
-                    );
+          Obx(
+            () => IconButton(
+                onPressed: () {
+                  if (GetXDataHandler.isSearching.value == false) {
+                    GetXDataHandler.isSearching.value = true;
                   } else {
-                    searchIcon = const Icon(Icons.search);
-                    appBarTitle = const Text('Home Page');
+                    GetXDataHandler.isSearching.value = false;
                   }
                 },
-              );
-            },
-            icon: searchIcon,
+                icon: GetXDataHandler.isSearching.value
+                    ? CommonIcons.cancel
+                    : CommonIcons.search),
           ),
         ],
       ),
       drawer: Drawer(
-        backgroundColor: Colors.black45,
+        backgroundColor: CommonColors.black45,
         child: Column(
           children: [
             DrawerHeader(
               child: Column(
                 children: [
-                  const CircleAvatar(
-                      radius: 52,
-                      backgroundImage:
-                          AssetImage('assets/images/profilePhoto.jpeg')),
+                  CircleAvatar(
+                    radius: 52,
+                    backgroundImage: AssetImage(CommonImages.userImage),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      'Harsh Hirapara',
+                      CommonString.userName,
                       style: TextStyle(color: CommonColors.white, fontSize: 18),
                     ),
                   ),
@@ -147,55 +102,47 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Divider(
-                    thickness: 0.7,
-                    color: CommonColors.white,
-                  ),
+                CommonDivider(
+                  left: 10,
+                  right: 10,
+                  thickness: 0.5,
+                  color: CommonColors.white,
                 ),
-                ListTile(
+                CommonListTile(
                   onTap: () => Get.back(),
-                  leading: Icon(
-                    Icons.home,
-                    color: CommonColors.white,
-                  ),
-                  title: Text(
-                    'Home',
-                    style: TextStyle(fontSize: 25, color: CommonColors.white),
-                  ),
+                  icon: const Icon(Icons.home),
+                  iconColor: CommonColors.white,
+                  title: CommonString.home,
+                  style: TextStyle(fontSize: 25, color: CommonColors.white),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 70, right: 10),
-                  child: Divider(
-                    thickness: 0.3,
-                    color: CommonColors.white,
-                  ),
+                CommonDivider(
+                  left: 70,
+                  right: 10,
+                  thickness: 0.5,
+                  color: CommonColors.white,
                 ),
-                ListTile(
-                  onTap: () {
-                    Get.to(() => const FavoriteUserScreen());
-                  },
-                  leading: SizedBox(
-                    child: CommonIcons.favorite,
-                  ),
-                  iconColor: CommonColors.deepPurple,
-                  title: Text(
-                    'Favorite',
-                    style: TextStyle(fontSize: 23, color: CommonColors.yellow),
+                CommonListTile(
+                  onTap: () => Get.to(() => const FavoriteUserScreen()),
+                  icon: CommonIcons.favorite,
+                  iconColor: CommonColors.red,
+                  title: CommonString.favorite,
+                  style: TextStyle(
+                    fontSize: 23,
+                    color: CommonColors.yellow,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height - 430),
                   child: TextButton(
-                    onPressed: () {
-                      GetXFunctions.userList.clear();
-                      GetXFunctions.favoriteList.clear();
+                    onPressed: () async {
+                      await SqfLiteDatabase.deleteAllUsers();
+                      GetXDataHandler.userList.clear();
+                      GetXDataHandler.favoriteList.clear();
                       Get.back();
                     },
                     child: Text(
-                      'Clear Data',
+                      CommonString.clearButton,
                       style: TextStyle(color: CommonColors.red),
                     ),
                   ),
@@ -207,17 +154,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Obx(
         () {
-          if (GetXFunctions.userList.isEmpty) {
-            return const Center(
+          if (GetXDataHandler.foundUser.isEmpty) {
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
+                  const CircularProgressIndicator(),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'No DataFound',
-                      style: TextStyle(fontSize: 17),
+                      CommonString.noUserFound,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -229,11 +179,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 return;
               },
               child: ListView.builder(
-                itemCount: foundUser.length,
+                itemCount: GetXDataHandler.foundUser.length,
                 itemBuilder: (context, index) {
-                  // final user = userList[index];
-                  // log(userList[index].toString());
-                  return UserCard(index: index, user: foundUser);
+                  return UserCard(
+                    index: index,
+                    user: GetXDataHandler.foundUser,
+                  );
                 },
               ),
             );
@@ -243,73 +194,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// <uses-permission android:name="android.permission.INTERNET" />
-
-// List<Map<String, dynamic>> myData = [];
-// bool isLoading = true;
-
-// void refreshData() async {
-//   final data = await DatabaseHandler.getItems();
-//   setState(() {
-//     myData = data;
-//     isLoading = false;
-//   });
-// }
-
-// @override
-// void initState() {
-//   super.initState();
-//   refreshData();
-// }
-
-// List allUsers = [
-//   'phone',
-//   'app',
-//   'mango',
-//   'harsh',
-//   'school',
-//   'hello',
-//   'hey',
-//   'Cricket'
-// ];
-// List foundUser = [];
-
-// @override
-// void initState() {
-//   foundUser = allUsers;
-//   super.initState();
-// }
-
-// void filter(value) {
-//   List results = [];
-//   if (value.isEmpty) {
-//     results = allUsers;
-//   } else {
-//     results = allUsers.where((element) => element.contains(value)).toList();
-//   }
-
-//   setState(() {
-//     foundUser = results;
-//   });
-// }
-
-//  var mappedList = boards.boards!.take(5).toList();
-
-//  // now, from the list above, I map each result into a key-value pair
-
-//   var mappedValues = mappedList.map((m) => { 'headsign': m.getString('headsign'), 'time': m.getString('time') });
-
-//  // this list will look like:
-//  // [{ headsign: 'value1', title: 'title1'}, { headsign: 'value2', title: 'value2' }]
-
-//  // Now moving mappedValues list to showDialog
-//  String title = ("Title Test");
-
-//  _DropDownList(mappedValues, title);
-//  });
-// }
-
-// Future<void> _DropDownList(List<Map<String, dynamic>> values, String title) async {
-//        var test1 = ListBody(
-//             ...

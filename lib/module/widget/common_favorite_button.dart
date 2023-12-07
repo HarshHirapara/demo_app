@@ -1,9 +1,8 @@
-import 'dart:developer';
-
+import 'package:demo_app/core/constant/common_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/getx/getx_functions.dart';
+import '../../core/getx/getx_handler.dart';
 
 class CommonFavoriteButton extends StatelessWidget {
   const CommonFavoriteButton(
@@ -12,20 +11,22 @@ class CommonFavoriteButton extends StatelessWidget {
   final List<Map<String, dynamic>> user;
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (GetXFunctions.favoriteList.contains(user[index])) {
-          GetXFunctions.favoriteList
-              .removeWhere((element) => element == user[index]);
-        } else {
-          GetXFunctions.favoriteList.add(user[index]);
-          log(GetXFunctions.favoriteList.length.toString());
-        }
-      },
-      icon: Obx(
-        () => GetXFunctions.favoriteList.contains(user[index])
-            ? const Icon(Icons.favorite)
-            : const Icon(Icons.favorite_border),
+    return Obx(
+      () => IconButton(
+        onPressed: () {
+          if (GetXDataHandler.favoriteList.contains(user[index])) {
+            GetXDataHandler.favoriteList
+                .removeWhere((element) => element == user[index]);
+            Get.back();
+          } else {
+            GetXDataHandler.favoriteList.add(user[index]);
+          }
+        },
+        icon: user.isEmpty
+            ? CommonIcons.favoriteBorder
+            : GetXDataHandler.favoriteList.contains(user[index])
+                ? CommonIcons.favorite
+                : CommonIcons.favoriteBorder,
       ),
     );
   }

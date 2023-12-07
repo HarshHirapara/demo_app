@@ -4,8 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:demo_app/core/database/sqflite_database.dart';
 import 'package:dio/dio.dart';
 
-import '../../module/widget/data_connectivity_dialog_bot.dart';
-import '../getx/getx_functions.dart';
+import '../../module/widget/common_data_connectivity_dialog_bot.dart';
+import '../getx/getx_handler.dart';
 import '../model/user_model_class.dart';
 
 class ApiCalls {
@@ -13,12 +13,15 @@ class ApiCalls {
   static List<UserModel> usersData = [];
   static Future getUserApi() async {
     Response response = await Dio().get('https://jsonplaceholder.org/users');
+
     List apiData = response.data;
+
     log(response.data.toString());
     if (response.statusCode == 200) {
       for (Map<String, dynamic> index in apiData) {
         usersData.add(UserModel.fromJson(index));
       }
+
       for (UserModel index in usersData) {
         final String street = index.address.street.toString();
         final String suite = index.address.suite.toString();
@@ -53,10 +56,11 @@ class ApiCalls {
     log('Refresh Data');
     var networkIsOn = await Connectivity().checkConnectivity();
     if (networkIsOn != ConnectivityResult.none) {
-      ApiCalls.getUserApi();
+      await ApiCalls.getUserApi();
       usersDataFormDatabase = await SqfLiteDatabase.getData();
-      GetXFunctions.userList.addAll(usersDataFormDatabase);
+      GetXDataHandler.userList.addAll(usersDataFormDatabase);
     } else {
+      log('no network');
       DataConnectivityCheck.showDialogBox(context);
     }
   }
