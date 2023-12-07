@@ -1,9 +1,12 @@
+import 'package:demo_app/core/constant/common_icons.dart';
+import 'package:demo_app/core/constant/common_string.dart';
 import 'package:demo_app/module/user_profile.dart/user_profile_page.dart';
 import 'package:demo_app/module/widget/common_favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
-import '../../core/constant/common_colors_file.dart';
+import '../../core/constant/common_colors.dart';
+import 'common_divider.dart';
 import 'common_user_profile_avatar.dart';
 
 class UserCard extends StatelessWidget {
@@ -24,7 +27,9 @@ class UserCard extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Card(
           elevation: 8,
-          color: index.isEven ? CommonColors.white : Colors.deepPurple.shade100,
+          color: index.isEven
+              ? CommonColors.white
+              : CommonColors.deepPurpleShade100,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -66,7 +71,7 @@ class UserCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Website  : ',
+                              text: CommonString.website,
                               style: TextStyle(
                                 color: CommonColors.black,
                                 fontWeight: FontWeight.w700,
@@ -81,12 +86,12 @@ class UserCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Divider(thickness: 1),
+                      const CommonDivider(thickness: 2),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Address : ',
+                              text: CommonString.address,
                               style: TextStyle(
                                 color: CommonColors.black,
                                 fontWeight: FontWeight.w700,
@@ -101,12 +106,12 @@ class UserCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Divider(thickness: 1),
+                      const CommonDivider(thickness: 2),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Company : ',
+                              text: CommonString.company,
                               style: TextStyle(
                                 color: CommonColors.black,
                                 fontWeight: FontWeight.w700,
@@ -121,10 +126,11 @@ class UserCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Divider(thickness: 1),
+                      // const Divider(thickness: 1),
+                      const CommonDivider(thickness: 2),
                       Row(
                         children: [
-                          const Icon(Icons.call),
+                          CommonIcons.call,
                           Text(
                             phone.substring(10),
                           ),

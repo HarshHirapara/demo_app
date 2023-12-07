@@ -1,7 +1,10 @@
-import 'package:demo_app/core/constant/common_colors_file.dart';
+import 'package:demo_app/core/constant/common_colors.dart';
+import 'package:demo_app/module/widget/common_divider.dart';
 import 'package:demo_app/module/widget/common_favorite_button.dart';
 import 'package:demo_app/module/widget/common_user_profile_avatar.dart';
 import 'package:flutter/material.dart';
+
+import '../widget/common_list_tile.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key, required this.index, required this.user});
@@ -69,101 +72,56 @@ class UserProfile extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        left: 10,
-                        right: 10,
-                        bottom: 10,
-                      ),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: CommonColors.black,
-                      ),
+                    CommonDivider(
+                      left: 70,
+                      right: 10,
+                      thickness: 0.5,
+                      color: CommonColors.black,
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.cake,
-                        color: CommonColors.deepPurple,
-                      ),
-                      title: Text(
-                        '${user[index]['birthDate']}',
-                      ),
+                    CommonListTile(
+                      icon: const Icon(Icons.cake),
+                      title: '${user[index]['birthDate']}',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 70,
-                        right: 10,
-                      ),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: CommonColors.black,
-                      ),
+                    CommonDivider(
+                      left: 70,
+                      right: 10,
+                      thickness: 0.5,
+                      color: CommonColors.black,
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.perm_identity,
-                        color: CommonColors.deepPurple,
-                      ),
-                      title: Text(
-                        '${user[index]['website']}',
-                      ),
+                    CommonListTile(
+                      icon: const Icon(Icons.perm_identity),
+                      title: '${user[index]['website']}',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 70,
-                        right: 10,
-                      ),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: CommonColors.black,
-                      ),
+                    CommonDivider(
+                      left: 70,
+                      right: 10,
+                      thickness: 0.5,
+                      color: CommonColors.black,
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.business,
-                        color: CommonColors.deepPurple,
-                      ),
-                      title: Text(
-                        '${user[index]['company']}',
-                      ),
+                    CommonListTile(
+                      icon: const Icon(Icons.business),
+                      title: '${user[index]['company']}',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 70,
-                        right: 10,
-                      ),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: CommonColors.black,
-                      ),
+                    CommonDivider(
+                      left: 70,
+                      right: 10,
+                      thickness: 0.5,
+                      color: CommonColors.black,
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.phone,
-                        color: CommonColors.deepPurple,
-                      ),
-                      title: Text(phone.substring(10)),
+                    CommonListTile(
+                      icon: const Icon(Icons.phone),
+                      title: phone.substring(10),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 70,
-                        right: 10,
-                      ),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: CommonColors.black,
-                      ),
+                    CommonDivider(
+                      left: 70,
+                      right: 10,
+                      thickness: 0.5,
+                      color: CommonColors.black,
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.location_on,
-                        color: CommonColors.deepPurple,
-                      ),
-                      title: Text(
-                        '${user[index]['address']}',
-                      ),
-                    ),
+                    CommonListTile(
+                      icon: const Icon(Icons.location_on),
+                      title: '${user[index]['address']}',
+                    )
                   ],
                 ),
               ],
