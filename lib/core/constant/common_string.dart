@@ -17,7 +17,7 @@ class CommonString {
   static String noInternetFound = 'No Internet !!';
   static String onMobileDataOrWiFiData = 'Please Turn on Mobile Data or WiFi';
   static String allDataClearOnNetwork =
-      'All data is Clear please turn on your Network';
+      'No Data Available please turn on your Network';
   static String cancel = 'Cancel';
   static String ok = 'Ok';
   static String pleaseTurnonMoBileData =

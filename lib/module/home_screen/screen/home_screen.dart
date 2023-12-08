@@ -184,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return UserCard(
                     index: index,
                     user: GetXDataHandler.foundUser,
+                    isFavoriteScreen: false,
                   );
                 },
               ),

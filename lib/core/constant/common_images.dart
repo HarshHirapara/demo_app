@@ -1,3 +1,3 @@
 class CommonImages {
-  static String userImage = 'assets/images/profilePhoto.jpeg';
+  static String userImage = 'assets/images/profile_photo.jpeg';
 }
