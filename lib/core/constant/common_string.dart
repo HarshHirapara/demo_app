@@ -4,6 +4,7 @@ class CommonString {
   static String noUserFound = 'No Favorite User Found!!';
 
   //home page
+  static String noUserFoundHomePage = 'Favorite User Found!!';
   static String search = 'Search';
   static String homePageAppBarrTitle = 'Home Page';
   static String userName = 'Harsh Hirapara';
