@@ -1,7 +1,6 @@
 import 'package:demo_app/core/constant/common_icons.dart';
 import 'package:demo_app/core/constant/common_string.dart';
 import 'package:demo_app/module/user_profile.dart/user_profile_page.dart';
-import 'package:demo_app/module/widget/common_favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constant/common_colors.dart';
@@ -10,12 +9,11 @@ import 'common_divider.dart';
 import 'common_user_profile_avatar.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({
-    super.key,
-    required this.index,
-    required this.user,
-    required this.isFavoriteScreen,
-  });
+  const UserCard(
+      {super.key,
+      required this.index,
+      required this.user,
+      required this.isFavoriteScreen});
   final int index;
   final List<Map<String, dynamic>> user;
   final bool isFavoriteScreen;
@@ -27,7 +25,11 @@ class UserCard extends StatelessWidget {
     final String lastName = user[index]['lastName'];
     return GestureDetector(
       onLongPress: () {
-        Get.to(() => UserProfile(index: index, user: user));
+        Get.to(() => UserProfile(
+              index: index,
+              user: user,
+              isFavoriteScreen: isFavoriteScreen,
+            ));
       },
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -46,29 +48,25 @@ class UserCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          isFavoriteScreen
-                              ? Obx(
-                                  () => IconButton(
-                                    onPressed: () async {
-                                      if (GetXDataHandler.favoriteList
-                                          .contains(user[index])) {
-                                        GetXDataHandler.favoriteList
-                                            .removeWhere((element) =>
-                                                element == user[index]);
-                                      } else {
-                                        GetXDataHandler.favoriteList
-                                            .add(user[index]);
-                                      }
-                                    },
-                                    icon: user.isEmpty
-                                        ? CommonIcons.favoriteBorder
-                                        : GetXDataHandler.favoriteList
-                                                .contains(user[index])
-                                            ? CommonIcons.favorite
-                                            : CommonIcons.favoriteBorder,
-                                  ),
-                                )
-                              : CommonFavoriteButton(index: index, user: user)
+                          Obx(
+                            () => IconButton(
+                              onPressed: () async {
+                                if (GetXDataHandler.favoriteList
+                                    .contains(user[index])) {
+                                  GetXDataHandler.favoriteList.removeWhere(
+                                      (element) => element == user[index]);
+                                } else {
+                                  GetXDataHandler.favoriteList.add(user[index]);
+                                }
+                              },
+                              icon: user.isEmpty
+                                  ? CommonIcons.favoriteBorder
+                                  : GetXDataHandler.favoriteList
+                                          .contains(user[index])
+                                      ? CommonIcons.favorite
+                                      : CommonIcons.favoriteBorder,
+                            ),
+                          )
                         ],
                       ),
                       CommonUserProfileAvatar(

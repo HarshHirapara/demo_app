@@ -2,7 +2,6 @@ import 'package:demo_app/core/constant/common_string.dart';
 import 'package:demo_app/core/getx/getx_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import '../../core/constant/common_colors.dart';
 import '../../core/constant/common_icons.dart';
 import '../user_profile.dart/user_profile_page.dart';
@@ -37,10 +36,10 @@ class FavoriteUserScreen extends StatelessWidget {
                 GetXDataHandler.favoriteList
                     .removeWhere((element) => element == tampListRemove[i]);
               }
+              tampListRemove.clear();
               for (var i = 0; i < tampListAdd.length; i++) {
                 GetXDataHandler.favoriteList.add(tampListAdd[i]);
               }
-              tampListRemove.clear();
               tampListAdd.clear();
             },
             child: ListView.builder(
@@ -56,7 +55,10 @@ class FavoriteUserScreen extends StatelessWidget {
                 return GestureDetector(
                   onLongPress: () {
                     Get.to(() => UserProfile(
-                        index: index, user: GetXDataHandler.favoriteList));
+                          index: index,
+                          user: GetXDataHandler.favoriteList,
+                          isFavoriteScreen: true,
+                        ));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -80,14 +82,27 @@ class FavoriteUserScreen extends StatelessWidget {
                                           onPressed: () {
                                             if (isUserFavorite.value) {
                                               isUserFavorite.value = false;
-                                              tampListRemove.add(GetXDataHandler
-                                                  .favoriteList[index]);
-                                              GetXDataHandler
-                                                  .favoriteList[index].remove;
+                                              if (tampListRemove.contains(
+                                                  GetXDataHandler
+                                                      .favoriteList[index])) {
+                                                return;
+                                              } else {
+                                                tampListRemove.add(
+                                                    GetXDataHandler
+                                                        .favoriteList[index]);
+                                                GetXDataHandler
+                                                    .favoriteList[index].remove;
+                                              }
                                             } else {
                                               isUserFavorite.value = true;
-                                              tampListAdd.add(GetXDataHandler
-                                                  .favoriteList[index]);
+                                              if (tampListAdd.contains(
+                                                  GetXDataHandler
+                                                      .favoriteList[index])) {
+                                                return;
+                                              } else {
+                                                tampListAdd.add(GetXDataHandler
+                                                    .favoriteList[index]);
+                                              }
                                             }
                                           },
                                           icon: GetXDataHandler

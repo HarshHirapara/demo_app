@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 class GetXDataHandler extends GetxController {
   static RxList<Map<String, dynamic>> userList = <Map<String, dynamic>>[].obs;
   static RxList<Map<String, dynamic>> foundUser = <Map<String, dynamic>>[].obs;
+  static RxList<Map<String, dynamic>> tampFavoriteUSer =
+      <Map<String, dynamic>>[].obs;
   static RxList<Map<String, dynamic>> favoriteList =
       <Map<String, dynamic>>[].obs;
 

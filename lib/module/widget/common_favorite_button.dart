@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:demo_app/core/constant/common_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../core/getx/getx_handler.dart';
 
 class CommonFavoriteButton extends StatelessWidget {
